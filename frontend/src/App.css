@@ -1,0 +1,41 @@
+.shell {
+  width: min(720px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 96px 0;
+}
+
+.eyebrow {
+  color: #5eead4;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+h1 {
+  margin: 16px 0;
+  font-size: clamp(2.6rem, 8vw, 5.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+
+p {
+  max-width: 620px;
+  color: #a7b0c0;
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+.stack span {
+  padding: 8px 12px;
+  border: 1px solid #2c3545;
+  border-radius: 999px;
+  color: #dce3ed;
+  background: #141a24;
+}

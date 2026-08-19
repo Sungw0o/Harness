@@ -1,0 +1,17 @@
+{
+  "name": "c203-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "engines": { "node": ">=20.19.0" },
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "backend:dev": "npm --prefix backend run dev",
+    "dev": "concurrently -n frontend,backend -c cyan,green \"npm:frontend:dev\" \"npm:backend:dev\"",
+    "lint": "npm --prefix frontend run lint",
+    "test": "npm --prefix frontend run test && npm --prefix backend run test",
+    "build": "npm --prefix frontend run build && npm --prefix backend run build",
+    "verify": "npm run lint && npm run test && npm run build"
+  },
+  "devDependencies": { "concurrently": "^9.2.1" }
+}

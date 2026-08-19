@@ -1,0 +1,87 @@
+plugins {
+	id 'java'
+	id 'jacoco'
+	id 'org.springframework.boot' version '4.1.0'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.c203'
+version = '0.0.1-SNAPSHOT'
+description = 'C203 monorepo backend'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	implementation 'org.flywaydb:flyway-core'
+	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy tasks.jacocoTestReport
+}
+
+jacoco {
+	toolVersion = '0.8.13'
+}
+
+// 커버리지 측정에서 제외할 대상. 변경은 MR 리뷰에서 사유를 확인한다.
+def coverageExcludes = [
+	'com/c203/app/BackendApplication*',
+	'com/c203/app/**/dto/**',
+	'com/c203/app/global/config/**',
+]
+
+tasks.jacocoTestReport {
+	dependsOn tasks.test
+	reports {
+		xml.required = true   // 추후 SonarQube 입력
+		csv.required = true   // GitLab MR 커버리지 위젯 계산용
+		html.required = true
+	}
+}
+
+tasks.jacocoTestCoverageVerification {
+	dependsOn tasks.test
+	violationRules {
+		rule {
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.80
+			}
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.70
+			}
+		}
+	}
+}
+
+afterEvaluate {
+	tasks.jacocoTestReport {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: coverageExcludes)
+		}))
+	}
+	tasks.jacocoTestCoverageVerification {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: coverageExcludes)
+		}))
+	}
+}

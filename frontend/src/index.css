@@ -1,0 +1,10 @@
+:root {
+  font-family: Inter, Pretendard, system-ui, sans-serif;
+  color: #f5f7fa;
+  background: #090d14;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }

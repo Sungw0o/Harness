@@ -1,0 +1,10 @@
+{
+  "name": "c203-backend",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/gradle.mjs bootRun",
+    "test": "node scripts/gradle.mjs test",
+    "test:coverage": "node scripts/gradle.mjs test jacocoTestCoverageVerification",
+    "build": "node scripts/gradle.mjs clean bootJar"
+  }
+}
