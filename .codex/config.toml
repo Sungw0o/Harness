@@ -4,6 +4,11 @@ hooks = true
 [mcp_servers.notion]
 url = "https://mcp.notion.com/mcp"
 
+# 팀 표준: 프런트엔드 화면 상태(로딩·성공·빈 결과·오류) 실제 브라우저 검증용
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest"]
+
 # Jira 프로젝트가 생성되고 접근 권한을 받은 뒤 활성화한다.
 # [mcp_servers.atlassian]
 # url = "https://mcp.atlassian.com/v1/mcp/authv2"

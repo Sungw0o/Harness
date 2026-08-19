@@ -13,8 +13,9 @@ description: React 프런트엔드 Issue를 API 계약 확인부터 구현, 화�
 
 1. 로딩·성공·빈 결과·오류 상태와 접근성 기준을 정리한다.
 2. API 타입과 공통 client를 먼저 반영한다.
-3. React 컴포넌트와 렌더링 테스트를 구현한다.
-4. `npm run lint && npm run test && npm run build`를 실행한다.
+3. 실패하는 렌더링 테스트를 먼저 작성한 뒤 React 컴포넌트를 구현한다.
+4. Playwright MCP로 실제 브라우저에서 로딩·성공·빈 결과·오류 상태를 확인한다(로컬 개발 서버 기준).
+5. `npm run lint && npm run test && npm run build`를 실행한다.
 
 ## 금지사항
 

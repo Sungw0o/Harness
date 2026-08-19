@@ -13,7 +13,7 @@ description: Spring Boot 백엔드 Issue를 요구사항 확인부터 구현, �
 
 1. 범위와 완료 조건, API·DB 영향, 실패 경로를 정리한다.
 2. `com.c203.app.domain.<domain>` 안에서 구현한다.
-3. 정상·실패 경로 테스트를 추가한다.
+3. 실패하는 테스트를 먼저 작성하고 정상·실패 경로를 모두 구현한다.
 4. API 변경 시 OpenAPI/계약 테스트, Schema 변경 시 Flyway migration을 함께 반영한다.
 5. `./gradlew test bootJar`를 실행한다.
 

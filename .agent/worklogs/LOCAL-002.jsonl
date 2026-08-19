@@ -1,0 +1,4 @@
+{"time":"2026-08-19T17:08:03+00:00","type":"START","summary":"바이브 코딩 대비 Skill 4종, Playwright MCP 표준화, 팀 브리핑 전면 개정","branch":"chore/LOCAL-002-vibe-skills-mcp-briefing","domain":"platform","workType":"Chore"}
+{"time":"2026-08-19T17:08:03+00:00","type":"DECISION","summary":"팀 표준 MCP는 Playwright 하나만 추가(키리스·재현 가능), chrome-devtools·glif·firecrawl·ponytail·superpowers는 개인 선택으로 분류","reason":"로그인·개인 키 의존 도구와 하네스 중복 워크플로는 팀 표준에서 제외"}
+{"time":"2026-08-19T17:08:03+00:00","type":"DECISION","summary":"범위 밖 개선은 improvement-backlog 기록 후 별도 작업, 스크래핑은 기능 코드 사용 금지 규칙 추가","reason":"풀 바이브 코딩의 스코프 폭주와 무계약 데이터 소스 방지"}
+{"time":"2026-08-19T17:11:10+00:00","type":"FINISH","summary":"Skill 4종·Playwright MCP 표준화·브리핑 개정 완료","verification":"quick-check·verify-worklog 통과, mcp.json/toml 문법 검증, 브리핑·가이드 표 갱신 확인"}
