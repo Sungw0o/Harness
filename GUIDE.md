@@ -59,7 +59,7 @@ npm --prefix backend run test:coverage
 
 ## 5. AI(Claude/Codex)와 작업할 때
 
-저장소를 신뢰 모드로 열면 훅이 자동 적용된다. 팀 표준 MCP는 Notion과 Playwright 두 개이며(`.mcp.json`·`.codex/config.toml`), 그 외 개인 플러그인이 하네스와 충돌하면 하네스를 따른다. AI는 `AGENTS.md`(공통 규칙)와 작업 폴더의 `AGENTS.md`를 항상 읽고, 작업 종류에 맞는 `.agents/skills/`의 Skill만 추가로 읽는다.
+저장소를 신뢰 모드로 열면 훅이 자동 적용된다. 상시 MCP는 Notion 하나이며(`.mcp.json`·`.codex/config.toml`), Playwright는 프런트 화면 작업 세션에서만 켜는 권장 도구다. 그 외 개인 플러그인이 하네스와 충돌하면 하네스를 따른다. AI는 `AGENTS.md`(공통 규칙)와 작업 폴더의 `AGENTS.md`를 항상 읽고, 작업 종류에 맞는 `.agents/skills/`의 Skill만 추가로 읽는다.
 
 | 작업 | Skill |
 | --- | --- |

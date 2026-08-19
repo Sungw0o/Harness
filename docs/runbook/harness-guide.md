@@ -94,7 +94,7 @@ git config --get core.hooksPath
 
 ### MCP 연결
 
-`.codex/config.toml`(Codex)과 루트 `.mcp.json`(Claude)에는 팀 표준 MCP 두 개가 선언돼 있다: Notion(요구사항·Work Log)과 Playwright(프런트 화면 상태의 실제 브라우저 검증). 그 밖의 MCP·플러그인은 개인 선택이며, 하네스와 충돌하면 하네스를 따른다. Atlassian MCP는 Jira 프로젝트와 접근 권한을 받은 뒤 주석을 해제하고 각 팀원이 자신의 계정으로 인증한다.
+`.codex/config.toml`(Codex)과 루트 `.mcp.json`(Claude)에는 상시 MCP로 Notion(요구사항·Work Log)만 선언돼 있다. Playwright(프런트 화면 4상태의 실제 브라우저 검증)는 프런트 작업 세션에서만 켠다 — MCP 도구 정의는 세션마다 토큰을 소모하므로 상시 선언은 최소로 유지한다. 그 밖의 MCP·플러그인은 개인 선택이며, 하네스와 충돌하면 하네스를 따른다. Atlassian MCP는 Jira 프로젝트와 접근 권한을 받은 뒤 주석을 해제하고 각 팀원이 자신의 계정으로 인증한다.
 
 `.agent/project.yml`의 다음 값은 실제 DB가 준비된 뒤 채운다.
 

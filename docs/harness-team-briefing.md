@@ -101,7 +101,8 @@ Skill을 새로 만들 때는 `docs/runbook/harness-guide.md`의 "Skill 추가 �
 | MCP | 용도 | 왜 표준인가 |
 | --- | --- | --- |
 | Notion | 요구사항·정책 조회, Work Log·Troubleshooting 동기화 | 프로젝트 지식의 단일 원본 |
-| Playwright | 프런트 화면 4상태를 실제 브라우저로 검증, 추후 E2E smoke | 키리스·전원 재현 가능. "구현했다" 보고 대신 실제 확인 |
+
+상시 선언 MCP는 Notion 하나만 둔다. MCP 도구 정의는 쓰지 않아도 세션마다 컨텍스트를 소모하므로, 상시 선언은 최소로 유지한다.
 
 ### 지급 대기 (조건 충족 시 활성화)
 
@@ -115,6 +116,7 @@ Skill을 새로 만들 때는 `docs/runbook/harness-guide.md`의 "Skill 추가 �
 
 | 도구 | 판단 | 주의 |
 | --- | --- | --- |
+| Playwright MCP | **프런트 화면 작업 세션에서만 켜는 권장 도구** — 4상태(로딩·성공·빈 결과·오류) 실제 브라우저 검증 | 상시 로드 금지(도구 정의 20여 개가 토큰 소모). `.codex/config.toml`의 주석을 해제하거나 개인 설정으로 연결. 미연결 시 렌더링 테스트+수동 확인으로 대체 |
 | chrome-devtools MCP | 성능 트레이스·네트워크 디버깅 보조로 유용 | 자동화 표준은 Playwright 하나로 통일 |
 | glif | 발표 자료용 미디어 생성 | 개인 로그인 필요 → 표준 불가 |
 | firecrawl | 리서치·문서 수집 | **시세 등 외부 데이터를 스크래핑으로 기능에 넣는 것 금지**(AGENTS.md 규칙) |
@@ -135,7 +137,7 @@ Skill을 새로 만들 때는 `docs/runbook/harness-guide.md`의 "Skill 추가 �
 - Secret 규칙: `.env`·키 파일 커밋 금지, 실제 값은 `.env.example`에 쓰지 않음, 로그에 토큰·개인정보 금지
 - Hook 우회(`--no-verify`) 금지, 검증 실패를 성공으로 보고하지 않기
 - 적용된 Flyway migration 수정·삭제 금지
-- 팀 표준 MCP(Notion, Playwright)는 프런트·요구사항 작업 시 사용
+- 상시 MCP는 Notion 하나. 프런트 화면 작업 시 Playwright 연결 권장(미연결 시 대체 절차로 확인 방법을 MR에 기록)
 
 ### 취사선택 (개인 자유, 단서 있음)
 
@@ -154,4 +156,4 @@ Skill을 새로 만들 때는 `docs/runbook/harness-guide.md`의 "Skill 추가 �
 - 시작은 `GUIDE.md` → 환경은 `doctor` → 상세는 `docs/runbook/harness-guide.md`.
 - 작업 키·브랜치·Work Log를 같은 키로, 중요한 것만 기록, MR 전 `verify-all`.
 - 커버리지 80%는 CI가 강제한다. 범위 밖 개선은 만들지 말고 `improvement-backlog`에 적는다.
-- 팀 표준 MCP는 Notion과 Playwright 둘. 나머지 도구는 자유, 충돌 시 하네스가 이긴다.
+- 상시 MCP는 Notion 하나, Playwright는 프런트 작업 때만 켠다. 나머지 도구는 자유, 충돌 시 하네스가 이긴다.
