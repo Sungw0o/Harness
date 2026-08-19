@@ -59,7 +59,7 @@ npm --prefix backend run test:coverage
 
 ## 5. AI(Claude/Codex)와 작업할 때
 
-저장소를 신뢰 모드로 열면 훅이 자동 적용된다. AI는 `AGENTS.md`(공통 규칙)와 작업 폴더의 `AGENTS.md`를 항상 읽고, 작업 종류에 맞는 `.agents/skills/`의 Skill만 추가로 읽는다.
+저장소를 신뢰 모드로 열면 훅이 자동 적용된다. 팀 표준 MCP는 Notion과 Playwright 두 개이며(`.mcp.json`·`.codex/config.toml`), 그 외 개인 플러그인이 하네스와 충돌하면 하네스를 따른다. AI는 `AGENTS.md`(공통 규칙)와 작업 폴더의 `AGENTS.md`를 항상 읽고, 작업 종류에 맞는 `.agents/skills/`의 Skill만 추가로 읽는다.
 
 | 작업 | Skill |
 | --- | --- |
@@ -72,6 +72,10 @@ npm --prefix backend run test:coverage
 | 커버리지 보강 | `test-coverage` |
 | 장애 기록 | `troubleshooting-record` |
 | dev 소규모 수정 | `dev-hotfix` |
+| 범위 밖 개선 기록 | `improvement-backlog` |
+| 세션 인수인계 | `session-handoff` |
+| 원인 불명 버그 | `bug-hunt` |
+| 동작 보존 리팩터링 | `safe-refactor` |
 
 ## 6. 현재 보류 상태 (지급 대기)
 

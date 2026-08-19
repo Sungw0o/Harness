@@ -94,7 +94,7 @@ git config --get core.hooksPath
 
 ### MCP 연결
 
-`.codex/config.toml`(Codex)과 루트 `.mcp.json`(Claude)에는 Notion MCP만 활성화돼 있다. Atlassian MCP는 Jira 프로젝트와 접근 권한을 받은 뒤 주석을 해제하고 각 팀원이 자신의 계정으로 인증한다.
+`.codex/config.toml`(Codex)과 루트 `.mcp.json`(Claude)에는 팀 표준 MCP 두 개가 선언돼 있다: Notion(요구사항·Work Log)과 Playwright(프런트 화면 상태의 실제 브라우저 검증). 그 밖의 MCP·플러그인은 개인 선택이며, 하네스와 충돌하면 하네스를 따른다. Atlassian MCP는 Jira 프로젝트와 접근 권한을 받은 뒤 주석을 해제하고 각 팀원이 자신의 계정으로 인증한다.
 
 `.agent/project.yml`의 다음 값은 실제 DB가 준비된 뒤 채운다.
 
@@ -191,6 +191,10 @@ python scripts/harness/task-log.py checkpoint LOCAL-001 DECISION `
 | `mr-review` | MR diff 리뷰와 코멘트 초안 작성 (PR-Agent 도입 전 대체) |
 | `test-coverage` | 커버리지 게이트(LINE 80%·BRANCH 70%) 미달 시 테스트 보강 |
 | `dev-hotfix` | dev 직접 push 예외 조건의 소규모 수정 |
+| `improvement-backlog` | 범위 밖 개선 아이디어(인덱스·캐시·부하테스트 등) 기록 |
+| `session-handoff` | 세션 종료·교대 시 인수인계 노트 작성과 이어받기 |
+| `bug-hunt` | 원인 불명 버그의 재현·가설·회귀 테스트 절차 |
+| `safe-refactor` | 동작 변경 없는 구조 개선 절차 |
 
 작업에 필요한 Skill만 읽는다. Skill이 지정한 검증과 산출물은 루트 규칙보다 좁은 작업 절차로 적용한다.
 
