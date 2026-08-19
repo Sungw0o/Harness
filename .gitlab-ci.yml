@@ -1,0 +1,91 @@
+workflow:
+  auto_cancel:
+    on_new_commit: interruptible
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - when: never
+
+stages: [guard, test, build]
+
+default:
+  interruptible: true
+
+secret_guard:
+  stage: guard
+  image:
+    name: zricethezav/gitleaks:v8.28.0
+    entrypoint: [""]
+  script:
+    - gitleaks git --redact --verbose
+
+harness_contract:
+  stage: guard
+  image: python:3.13-alpine
+  script:
+    - python scripts/harness/verify-worklog.py --branch "$CI_COMMIT_REF_NAME"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+frontend_quality:
+  stage: test
+  image: node:24-alpine
+  cache:
+    key:
+      files: [frontend/package-lock.json]
+    paths: [frontend/.npm]
+  before_script:
+    - cd frontend
+    - npm ci --cache .npm --prefer-offline
+  script:
+    - npm run lint
+    - npm run test:coverage
+    - npm run build
+  coverage: '/Lines\s*:\s*([0-9.]+)%/'
+  artifacts:
+    when: always
+    paths: [frontend/coverage/lcov.info]
+    expire_in: 7 days
+  rules:
+    - changes: [frontend/**/*, .gitlab-ci.yml]
+
+backend_test:
+  stage: test
+  image: gradle:9-jdk21-alpine
+  variables:
+    GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+  cache:
+    key:
+      files: [backend/gradle/wrapper/gradle-wrapper.properties]
+    paths: [.gradle/caches, .gradle/wrapper]
+  script:
+    - cd backend
+    - ./gradlew test jacocoTestCoverageVerification jacocoTestReport
+    - |
+      awk -F',' 'NR>1 {m+=$8; c+=$9} END { if (m+c>0) printf "Total %.1f%%\n", 100*c/(m+c); else print "Total 100.0%" }' build/reports/jacoco/test/jacocoTestReport.csv || true
+  coverage: '/Total ([0-9.]+)%/'
+  artifacts:
+    when: always
+    reports:
+      junit: backend/build/test-results/test/TEST-*.xml
+    paths: [backend/build/reports/jacoco/test/jacocoTestReport.xml]
+    expire_in: 7 days
+  rules:
+    - changes: [backend/**/*, .gitlab-ci.yml]
+
+backend_package:
+  stage: build
+  image: gradle:9-jdk21-alpine
+  variables:
+    GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+  script:
+    - cd backend
+    - ./gradlew bootJar
+  artifacts:
+    paths: [backend/build/libs/*.jar]
+    expire_in: 7 days
+  rules:
+    - changes: [backend/**/*, .gitlab-ci.yml]
