@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://c203.local/schemas/troubleshooting.schema.json",
+  "title": "C203 Troubleshooting Record",
+  "type": "object",
+  "required": ["title", "jiraKey", "symptom", "rootCause", "solution", "verification", "prevention"],
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "jiraKey": { "type": "string", "pattern": "^(ATH|LOCAL)-[0-9]+$" },
+    "domain": { "type": "string" },
+    "environment": { "type": "string" },
+    "severity": { "enum": ["Low", "Medium", "High", "Critical"] },
+    "symptom": { "type": "string", "minLength": 1 },
+    "failedAttempts": { "type": "array", "items": { "type": "string" } },
+    "rootCause": { "type": "string", "minLength": 1 },
+    "solution": { "type": "string", "minLength": 1 },
+    "verification": { "type": "string", "minLength": 1 },
+    "prevention": { "type": "string", "minLength": 1 },
+    "mrUrl": { "type": "string" }
+  },
+  "additionalProperties": false
+}

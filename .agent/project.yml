@@ -1,0 +1,57 @@
+project:
+  name: AI Trading Hunter
+  defaultBranch: dev
+  repository: Harness
+
+jira:
+  status: pending
+  projectKey: ""
+  plannedProjectKey: ATH
+  requireIssueKey: false
+  hierarchy: [Epic, Task]
+  components: [Frontend, Backend, Database, Infra]
+  releasePolicy: sprint-demo
+  note: 활성화 시 task-log.py, verify-worklog.py, verify-branch.sh의 Key 패턴도 실제 Key로 변경
+
+database:
+  engine: pending
+  migrationTool: flyway
+  migrationPath: backend/src/main/resources/db/migration
+  outOfOrder: false
+  note: DB 엔진 확정 후 JDBC 드라이버와 DB별 Flyway 모듈 추가
+
+quality:
+  coverageGate: ci
+  coverageLine: 0.80
+  coverageBranch: 0.70
+  sonarqube: pending
+  note: 게이트는 CI(JaCoCo·Vitest)가 강제, SonarQube는 EC2 지급 후 dev 브랜치 대시보드로 추가
+
+notion:
+  status: partial
+  sourcePage: https://app.notion.com/p/3b5827b327618177bb1dddd99610a968
+  workLogsDataSource: ""
+  troubleshootingDataSource: ""
+  statuses: [준비, 개발 중, 리뷰 중, 완료]
+
+infrastructure:
+  ec2Status: pending
+  deploymentEnabled: false
+  productionChangesRequireApproval: true
+
+deployment:
+  ciStageEnabled: false
+  gitlabReleaseEnabled: false
+  targetHost: ""
+  healthCheckUrl: ""
+  note: EC2 지급과 운영 정책 확정 후 별도 작업으로 활성화
+
+review:
+  prAgent: pending
+  note: AI API Key 지급 후 연동. 그 전에는 mr-review Skill로 대체
+
+sync:
+  localFirst: true
+  worklogPath: .agent/worklogs
+  blockMergeOnCodeFailure: true
+  blockMergeOnNotionFailure: false

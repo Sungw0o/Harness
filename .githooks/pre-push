@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+set -eu
+
+root="$(git rev-parse --show-toplevel)"
+sh "$root/.harness/scripts/quick-check.sh"
+sh "$root/scripts/harness/verify-branch.sh"
+python "$root/scripts/harness/verify-worklog.py"
+
+echo "pre-push 통과 — 전체 test/build/커버리지는 CI와 MR 전 verify-all이 담당합니다."

@@ -1,0 +1,8 @@
+members: []
+
+# 예시
+# members:
+#   - name: 홍길동
+#     jiraAccountId: ""
+#     notionUserId: ""
+#     domains: [trading]

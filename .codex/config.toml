@@ -1,0 +1,9 @@
+[features]
+hooks = true
+
+[mcp_servers.notion]
+url = "https://mcp.notion.com/mcp"
+
+# Jira 프로젝트가 생성되고 접근 권한을 받은 뒤 활성화한다.
+# [mcp_servers.atlassian]
+# url = "https://mcp.atlassian.com/v1/mcp/authv2"

@@ -1,0 +1,45 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^(Bash|apply_patch|Edit|Write)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel 2>/dev/null || pwd)\"; sh \"$root/.harness/scripts/guard.sh\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root = (git rev-parse --show-toplevel 2>$null); if (-not $root) { $root = (Get-Location).Path }; & (Join-Path $root '.harness/scripts/guard.ps1')\"",
+            "timeout": 30,
+            "statusMessage": "저장소 안전 정책 확인 중"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^(apply_patch|Edit|Write)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel 2>/dev/null || pwd)\"; sh \"$root/.harness/scripts/quick-check.sh\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root = (git rev-parse --show-toplevel 2>$null); if (-not $root) { $root = (Get-Location).Path }; & (Join-Path $root '.harness/scripts/quick-check.ps1')\"",
+            "timeout": 60,
+            "statusMessage": "변경 파일 Secret 검사 중"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel 2>/dev/null || pwd)\"; sh \"$root/.harness/scripts/run-related-tests.sh\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root = (git rev-parse --show-toplevel 2>$null); if (-not $root) { $root = (Get-Location).Path }; & (Join-Path $root '.harness/scripts/run-related-tests.ps1')\"",
+            "timeout": 300,
+            "statusMessage": "변경 영역 빠른 검사 실행 중"
+          }
+        ]
+      }
+    ]
+  }
+}

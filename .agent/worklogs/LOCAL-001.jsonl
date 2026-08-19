@@ -1,0 +1,4 @@
+{"time":"2026-08-19T16:51:51+00:00","type":"START","summary":"프로젝트 부트스트랩: 모노레포 골격과 AI 개발 하네스 구성","branch":"chore/LOCAL-001-project-bootstrap","domain":"platform","workType":"Chore"}
+{"time":"2026-08-19T16:51:51+00:00","type":"DECISION","summary":"Jira·EC2·AI Key 지급 전이므로 LOCAL 키 사용, 배포·PR-Agent 비활성 상태로 구성","reason":"외부 시스템 미지급 상태를 가정하지 않기로 함"}
+{"time":"2026-08-19T16:51:51+00:00","type":"DECISION","summary":"커버리지 게이트(LINE 80/BRANCH 70)는 CI가 강제하고 로컬 훅은 초 단위 검사만 수행","reason":"동일 검사의 로컬·CI 중복 실행 병목 제거"}
+{"time":"2026-08-19T16:51:51+00:00","type":"FINISH","summary":"하네스·골격·CI·문서 구성 완료","verification":"frontend lint/test:coverage/build 통과, guard·quick-check·worklog 검사 실측 통과, whitespace 검사 통과. backend test는 로컬 Windows에서 npm --prefix backend run test:coverage 1회 실행 필요"}

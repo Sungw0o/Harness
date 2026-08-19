@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+set -eu
+
+blocked="$(git diff --cached --name-only | grep -E '(^|/)(\.env($|\.)|.*\.(pem|key|p12|jks)$)' | grep -vE '\.env\.example$' || true)"
+if [ -n "$blocked" ]; then
+  echo "커밋 차단: Secret 파일은 커밋할 수 없습니다:" >&2
+  echo "$blocked" >&2
+  exit 1
+fi
+
+git diff --cached --check
+root="$(git rev-parse --show-toplevel)"
+sh "$root/.harness/scripts/quick-check.sh"
