@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -37,6 +38,63 @@ def current_branch() -> str:
         ["git", "branch", "--show-current"], cwd=ROOT, capture_output=True, text=True, check=False
     )
     return result.stdout.strip()
+
+
+def git_ref_exists(ref: str) -> bool:
+    return subprocess.run(
+        ["git", "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"],
+        cwd=ROOT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    ).returncode == 0
+
+
+def resolve_base_ref(requested: str, branch: str) -> str:
+    candidates = [requested, os.environ.get("CI_MERGE_REQUEST_DIFF_BASE_SHA", "")]
+    candidates.append("HEAD^" if branch in {"main", "dev"} else "origin/dev")
+    for candidate in candidates:
+        if candidate and set(candidate) != {"0"} and git_ref_exists(candidate):
+            return candidate
+    return ""
+
+
+def is_append_only(base_content: bytes, current_content: bytes) -> bool:
+    normalize = lambda value: value.replace(b"\r\n", b"\n")
+    return normalize(current_content).startswith(normalize(base_content))
+
+
+def validate_append_only(base_ref: str) -> list[str]:
+    result = subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", base_ref, "--", ".agent/worklogs"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if result.returncode:
+        return [f"append-only 기준 ref를 읽지 못했습니다: {base_ref}"]
+
+    errors: list[str] = []
+    for relative_path in result.stdout.splitlines():
+        if not relative_path.endswith(".jsonl"):
+            continue
+        current_path = ROOT / relative_path
+        if not current_path.exists():
+            errors.append(f"{relative_path}: 기존 Work Log를 삭제할 수 없습니다.")
+            continue
+        base = subprocess.run(
+            ["git", "show", f"{base_ref}:{relative_path}"],
+            cwd=ROOT,
+            capture_output=True,
+            check=False,
+        )
+        if base.returncode:
+            errors.append(f"{relative_path}: 기준 Work Log를 읽지 못했습니다.")
+        elif not is_append_only(base.stdout, current_path.read_bytes()):
+            errors.append(f"{relative_path}: 기존 이벤트를 수정하거나 삭제할 수 없습니다.")
+    return errors
 
 
 def validate_file(path: Path) -> list[str]:
@@ -75,6 +133,7 @@ def validate_file(path: Path) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--branch", default="")
+    parser.add_argument("--base-ref", default="")
     args = parser.parse_args()
     branch = args.branch or current_branch()
     errors: list[str] = []
@@ -87,6 +146,10 @@ def main() -> int:
 
     for path in sorted(WORKLOG_DIR.glob("*.jsonl")):
         errors.extend(validate_file(path))
+
+    base_ref = resolve_base_ref(args.base_ref, branch)
+    if base_ref:
+        errors.extend(validate_append_only(base_ref))
 
     if errors:
         for error in errors:

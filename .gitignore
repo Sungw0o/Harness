@@ -5,6 +5,8 @@ frontend/coverage/
 backend/.gradle/
 backend/build/
 .gradle-user-home/
+__pycache__/
+*.py[cod]
 tmp/
 .idea/
 .vscode/

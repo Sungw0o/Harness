@@ -12,7 +12,7 @@ if ($branch -notin @('main', 'dev') -and $branch -notmatch $branchPattern) {
 # 커밋 제목 형식 검사 (verify-commit.sh와 동일 규칙)
 $message = git log -1 --pretty=%s 2>$null
 if ($message) {
-    $commitPattern = '^(✨ feat|🐛 fix|♻️ refactor|✅ test|📝 docs|🚀 infra|🔧 chore|⚡️ perf|🔒 security): '
+    $commitPattern = '^(✨ feat|🐛 fix|♻️ refactor|✅ test|📝 docs|🚀 infra|🔧 chore|⚡️ perf|🔒 security): \S.*$'
     if ($message -notmatch $commitPattern) {
         Write-Error "[FAIL] 커밋 제목 형식이 올바르지 않습니다: $message"
         exit 1
@@ -20,6 +20,8 @@ if ($message) {
 }
 
 python "$root/scripts/harness/verify-worklog.py" --branch $branch
+if ($LASTEXITCODE) { exit $LASTEXITCODE }
+python "$root/scripts/harness/test-harness.py"
 if ($LASTEXITCODE) { exit $LASTEXITCODE }
 
 & "$root/.harness/scripts/quick-check.ps1"

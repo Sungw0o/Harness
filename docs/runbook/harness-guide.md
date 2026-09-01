@@ -215,7 +215,7 @@ python scripts/harness/task-log.py checkpoint LOCAL-001 DECISION `
 | pre-commit | Secret 파일, whitespace, 커밋 대상 검사 |
 | commit-msg | Gitmoji + type 형식 검사 |
 | pre-push | 브랜치 형식, Work Log, Secret 검사 (초 단위) |
-| GitLab CI | Gitleaks, Work Log 계약, 테스트, 빌드 산출물 |
+| GitLab CI | Gitleaks, guard·컨벤션·Work Log 계약 회귀 테스트, 애플리케이션 테스트, 빌드 산출물 |
 
 분 단위 검사(전체 test·build·커버리지)는 CI 한 곳에서만 강제해 로컬 반복 병목을 없앤다. MR을 열기 전에는 `verify-all`로 전체 검증을 1회 실행한다.
 

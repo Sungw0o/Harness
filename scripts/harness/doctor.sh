@@ -18,7 +18,12 @@ case "$node_v" in
 esac
 
 java -version 2>&1 | grep -q '"21' && ok "Java 21" || bad "Java 21이 필요합니다: $(java -version 2>&1 | head -n 1 || echo '없음')"
-command -v python >/dev/null 2>&1 || command -v python3 >/dev/null 2>&1 && ok "Python" || bad "Python 3이 필요합니다."
+python_command="$(command -v python 2>/dev/null || command -v python3 2>/dev/null || true)"
+python_v="$(${python_command:-false} --version 2>&1 || true)"
+case "$python_v" in
+  "Python 3."*) ok "$python_v" ;;
+  *) bad "Python 3이 필요합니다." ;;
+esac
 
 # 2. Git Hook 경로
 hooks="$(git config --get core.hooksPath || true)"
