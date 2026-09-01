@@ -12,7 +12,8 @@ $nodeV = (node --version) 2>$null
 if ($nodeV -and [version]($nodeV.TrimStart('v')) -ge [version]'20.19.0') { OK "Node $nodeV" } else { BAD "Node 20.19 이상이 필요합니다 (현재: $nodeV)" }
 $javaV = (java -version) 2>&1 | Select-Object -First 1
 if ("$javaV" -match '"21') { OK 'Java 21' } else { BAD "Java 21이 필요합니다: $javaV" }
-if (Get-Command python -ErrorAction SilentlyContinue) { OK 'Python' } else { BAD 'Python 3이 필요합니다.' }
+$pythonV = (python --version) 2>&1
+if ($LASTEXITCODE -eq 0 -and "$pythonV" -match '^Python 3\.') { OK "$pythonV" } else { BAD 'Python 3이 필요합니다.' }
 
 # 2. Git Hook 경로
 $hooks = git config --get core.hooksPath
@@ -22,9 +23,11 @@ if ($hooks -eq '.githooks') { OK 'core.hooksPath=.githooks' } else { BAD 'core.h
 if (Test-Path 'frontend/node_modules') { OK 'frontend/node_modules' } else { BAD 'frontend npm install이 필요합니다.' }
 
 # 4. guard 훅 동작 (차단이 정상)
-'{"command":"cat .env"}' | & .harness/scripts/guard.ps1 2>$null
+$powerShellHost = (Get-Process -Id $PID).Path
+$guardScript = Join-Path $root '.harness/scripts/guard.ps1'
+'{"command":"cat .env"}' | & $powerShellHost -NoProfile -ExecutionPolicy Bypass -File $guardScript 2>$null
 if ($LASTEXITCODE -eq 2) { OK 'guard가 .env 접근을 차단합니다.' } else { BAD 'guard가 .env 접근을 차단하지 못했습니다.' }
-'{"command":"ls src"}' | & .harness/scripts/guard.ps1 2>$null
+'{"command":"ls src"}' | & $powerShellHost -NoProfile -ExecutionPolicy Bypass -File $guardScript 2>$null
 if ($LASTEXITCODE -eq 2) { BAD 'guard가 정상 명령까지 차단합니다.' } else { OK 'guard가 정상 명령을 통과시킵니다.' }
 
 # 5. Secret 패턴 파일

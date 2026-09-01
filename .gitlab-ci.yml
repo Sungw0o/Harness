@@ -24,6 +24,7 @@ harness_contract:
   stage: guard
   image: python:3.13-alpine
   script:
+    - python scripts/harness/test-harness.py
     - python scripts/harness/verify-worklog.py --branch "$CI_COMMIT_REF_NAME"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
